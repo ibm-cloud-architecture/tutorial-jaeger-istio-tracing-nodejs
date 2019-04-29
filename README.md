@@ -25,3 +25,7 @@ Run docker image and expose port 8080
 docker run --rm -p 8080:8080 app-rates
 ```
 
+Test rates API
+```
+curl http://localhost:8080/rates
+```

@@ -4,12 +4,12 @@ let rates = {
         {
             id: "001",
             name: "honda civic",
-            price: 100.00
+            price: 100.50
         },
         {
             id: "002",
             name: "ford focus",
-            price: 150.00
+            price: 150.99
         }
     ]
 }
