@@ -30,6 +30,40 @@ Test rates API
 curl http://localhost:8080/rates
 ```
 
+## Jaeger
+
+### Using Jaeger locally with Docker
+Will launch the two containers in docker, since they will share the same subnet the jaeger data should will be transported using the Jaeger Client using UDP (`jaeger:6832`)
+
+Start Jaeger container
+```
+docker run --rm --name jaeger \
+  -p 16686:16686 \
+  jaegertracing/all-in-one:1.11 \
+  --log-level=debug
+```
+
+Start the node.js app container with `--link jaeger` to link the hostname `jaeger` to the IP Address of the jaeger container, and pass the env variable `JAEGER_AGENT_HOST` to pass the hostname to the tracer
+```
+docker run --rm --name app-rates -it \
+--link jaeger \
+--env JAEGER_AGENT_HOST="jaeger" \
+-p 8080:8080 \
+app-rates
+```
+
+Open the browser for the nodejs.app http://localhost:8080
+
+Try the calling the API http://localhost:8080/rates a couple of times to report some traces
+
+Now open a Browser to load the Frontend UI on http://localhost:16686 click search button
+
+In the drop down select the Service `rates`
+
+Click `Find Traces` at the bottom to find the traces
+
+Select one of the traces to inspect the spans
+
 
 ### Client Libraries
 There are many client libraries for opentracing, jaeger, and zipkin pickig the corrent ones can be a challenge
@@ -46,5 +80,5 @@ Will be using the `jaeger-client` and using some code from `express-opentracing`
 
 
 ### Resources
-- Core repo for the book Mastering Distributed Tracing by Yuri Shkuro https://github.com/PacktPublishing/Mastering-Distributed-Tracing
+- Repo for the book Mastering Distributed Tracing by Yuri Shkuro https://github.com/PacktPublishing/Mastering-Distributed-Tracing
 - OpenTracing Tutorial https://github.com/yurishkuro/opentracing-tutorial
