@@ -42,12 +42,6 @@ function middleware(options = {}) {
             span.log({ 'event': 'request_end' });
             span.finish();
         };
-        res.on('error', err => {
-            // assuming no retries, mark the span as failed
-            span.setTag(opentracing.Tags.ERROR, true);
-            span.log({ 'event': 'error', 'error.object': err, 'message': err.message, 'stack': err.stack });
-            span.finish();
-        });
         res.on('close', finishSpan);
         res.on('finish', finishSpan);
 
