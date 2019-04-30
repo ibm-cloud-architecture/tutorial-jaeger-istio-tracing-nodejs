@@ -51,6 +51,18 @@ docker run --rm --name app-rates -it \
 -p 8080:8080 \
 app-rates
 ```
+## Using Jaeger locally using Docker-Compose
+Instead of running each docker seperately you can bring all containers at once using docker-compose
+
+To start all containers
+```
+docker-compose up -d
+```
+To stop and remove containers
+```
+docker-compose down
+```
+
 
 Open the browser for the nodejs.app http://localhost:8080
 
@@ -82,3 +94,21 @@ Will be using the `jaeger-client` and using some code from `express-opentracing`
 ### Resources
 - Repo for the book Mastering Distributed Tracing by Yuri Shkuro https://github.com/PacktPublishing/Mastering-Distributed-Tracing
 - OpenTracing Tutorial https://github.com/yurishkuro/opentracing-tutorial
+
+### Development Hacking
+Instructions for developers doing work on this repo and making updates
+You can start the jaeger container and expose ports on localhost for collection, and then run node.js app locally using node without a container
+
+Start Jaeger container
+```
+docker run --rm --name jaeger \
+  -p 6832:6832/udp \
+  -p 16686:16686 \
+  jaegertracing/all-in-one:1.11 \
+  --log-level=debug
+```
+
+Start the Node.js app
+```
+cd app-rates && npm run debug
+```
