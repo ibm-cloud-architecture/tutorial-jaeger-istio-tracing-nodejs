@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "debug": "DEBUG=app-rates:* npm start"
+    "debug": "DEBUG=app-rates:* npm start",
+    "vscode": "DEBUG=app-rates:* node --inspect-brk=9229 ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
