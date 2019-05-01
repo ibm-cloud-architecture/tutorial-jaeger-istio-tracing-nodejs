@@ -19,9 +19,9 @@ function middleware(options = {}) {
 
         // include trace ID in headers so that we can debug slow requests we see in
         // the browser by looking up the trace ID found in response headers
-        //const responseHeaders = {};
-        //tracer.inject(span, opentracing.FORMAT_TEXT_MAP, responseHeaders);
-        //Object.keys(responseHeaders).forEach(key => res.setHeader(key, responseHeaders[key]));
+        const responseHeaders = {};
+        tracer.inject(span, opentracing.FORMAT_HTTP_HEADERS, responseHeaders);
+        res.set(responseHeaders)
 
         // add the span to the request object for handlers to use
         Object.assign(req, { span });
