@@ -1,0 +1,41 @@
+##################################################################################################
+# RatesApp services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+    service: myapp
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: myapp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  myapp-v1
+  labels:
+    app: myapp
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+        version: v1
+    spec:
+      containers:
+      - name: myapp
+        image: csantanapr/app-rates
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
