@@ -4,7 +4,7 @@ var ratesDB = require('./ratesFromDB');
 
 router.get('/', function (req, res, next) {
     // show how to do a Tag KV
-    let memberid = req.param("memberid", "0023")
+    let memberid = req.query.memberid || "0000";
     const ctx = {
         span: req.span
     };
