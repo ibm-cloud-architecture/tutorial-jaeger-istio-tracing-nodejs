@@ -20,12 +20,15 @@ function getRates(ctx) {
     // getting the global tracer
     const tracer = opentracing.globalTracer();
     // show how to start new child span
-    const span = tracer.startSpan("ratesfromdb", { childOf: ctx })
+    ctx = {
+        span: tracer.startSpan("ratesfromdb", { childOf: ctx.span })
+    };
+    //    const span = tracer.startSpan("ratesfromdb", { childOf: ctx.span })
     return new Promise((resolve, reject) => {
         // simulating a 200ms delay from DB
         // response can't be faster than 200ms
         setTimeout(() => {
-            span.finish()
+            ctx.span.finish()
             resolve(rates)
         }, 200);
     })
