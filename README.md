@@ -62,10 +62,13 @@ To stop and remove containers
 ```
 docker-compose down
 ```
-## Using Kubernetes
+## Using Jaeger on Kubernetes
 
 I strongly recommend installing `kubectx` and `kubens` from https://github.com/ahmetb/kubectx
 
+Setup kubernetes on Docker for Mac or Minikube, pick one:
+
+### Setup Kubernetes on Docker for Mac
 *Using Docker for Mac (Edge) kubernetes v1.13*
 1. Go to preferences, advance tab, and make sure you are using 4 CPU, 8 GB Mem
 1. Go to preferences, kubernetes tab enable kubernetes and wait to be ready
@@ -75,8 +78,36 @@ I strongly recommend installing `kubectx` and `kubens` from https://github.com/a
 Check that `kubectl` is pointing to correct context
 ```
 kubectl get nodes
+
 NAME             STATUS   ROLES    AGE   VERSION
 docker-desktop   Ready    master   73m   v1.13.0
+```
+
+### Setup Kubernetes on Minkube
+## Minikube
+
+Install Minikube from here https://github.com/kubernetes/minikube/releases
+I used minikube v1.0.1 and VirtualBox Version 5.2.28 r130011 (Qt5.6.3)
+```
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.0.1/minikube-darwin-amd64 && chmod +x minikube && sudo cp minikube /usr/local/bin/ && rm minikube
+```
+
+TLDR;
+```
+minikube delete
+minikube config set kubernetes-version v1.14.1
+minikube config set cpus 4
+minikube config set memory 8192
+minikube config set WantUpdateNotification false
+minikube start --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
+minikube ssh -- sudo ip link set docker0 promisc on
+```
+Check that `kubectl` is pointing to correct context
+```
+kubectl get nodes
+
+NAME       STATUS   ROLES    AGE   VERSION
+minikube   Ready    master   16m   v1.14.1
 ```
 
 ### Deploy Jaeger on Kubernetes
@@ -109,7 +140,7 @@ Expose the Jaeger frontend UI on localhost
 kubectl port-forward svc/simplest-query 16686:16686
 ```
 
-### Deploy Node.js Application
+### Deploy Node.js Application on Kubernetes
 
 Tag and Push the docker container for the node.js app using a registry namespace/user
 ```
@@ -117,7 +148,7 @@ docker tag app-rates -t ${DOCKER_USERNAME}/app-rates
 docker push ${DOCKER_USERNAME}/app-rates
 ```
 
-Edit the file `business-application-injected-sidecar.yaml` with your image name
+Edit the file [kubernetes/jaeger/my-app.yaml](./kubernetes/jaeger/my-app.yaml) with your image name
 Deploy using `kubectl`
 ```
 kubectl apply -f kubernetes/jaeger/my-app.yaml
@@ -125,7 +156,7 @@ kubectl apply -f kubernetes/jaeger/my-app.yaml
 
 Expose the Node.js App on localhost
 ```
-k port-forward deployment/myapp-deployment 8080:8080
+kubectl port-forward deployment/myapp-deployment 8080:8080
 ```
 
 ## Test the Application
