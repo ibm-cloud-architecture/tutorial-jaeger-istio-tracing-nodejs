@@ -42,7 +42,7 @@ function middleware(options = {}) {
             span.log({ 'event': 'request_end' });
             span.finish();
         };
-        res.on('close', finishSpan);
+        //res.on('close', finishSpan);
         res.on('finish', finishSpan);
 
         next();
