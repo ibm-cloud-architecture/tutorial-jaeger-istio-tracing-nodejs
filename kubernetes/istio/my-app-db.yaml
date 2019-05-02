@@ -39,6 +39,10 @@ spec:
         env:
         - name: JAEGER_AGENT_HOST
           value: jaeger-agent.istio-system.svc.cluster.local
+        - name: CLOUDANT_URL
+          value: YOUR_URL
+        - name: CLOUDANT_DB
+          value: YOUR_DB
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
