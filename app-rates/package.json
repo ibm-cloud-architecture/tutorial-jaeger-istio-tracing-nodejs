@@ -8,6 +8,7 @@
     "vscode": "DEBUG=app-rates:* node --inspect-brk=9229 ./bin/www"
   },
   "dependencies": {
+    "@cloudant/cloudant": "^4.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",

@@ -16,7 +16,17 @@ let rates = {
         }
     ]
 }
-function getRates(ctx) {
+const CloudantURL = process.env.CLOUDANT_URL;
+const CloudantDB = process.env.CLOUDANT_DB;
+var getRates = getRatesLocal;
+if (CloudantURL) {
+    getRates = getRatesCloudant;
+    var Cloudant = require('@cloudant/cloudant');
+    var cloudant = Cloudant(CloudantURL);
+    var db = cloudant.use(CloudantDB);
+}
+
+function getRatesLocal(ctx) {
     // getting the global tracer
     const tracer = opentracing.globalTracer();
     // show how to start new child span
@@ -33,6 +43,84 @@ function getRates(ctx) {
         }, 200);
     })
 }
+
+function getRatesCloudantTMP(ctx) {
+    // getting the global tracer
+    const tracer = opentracing.globalTracer();
+    // show how to start new child span
+    ctx = {
+        span: tracer.startSpan("ratesfromCloudantdb", { childOf: ctx.span })
+    };
+
+    //    const span = tracer.startSpan("ratesfromdb", { childOf: ctx.span })
+    return new Promise((resolve, reject) => {
+        db.list({ include_docs: true }).then((body) => {
+            var rates = {};
+            rates.items = []
+            body.rows.forEach((doc) => {
+                // output eacj document's body
+                console.log(doc.doc);
+                rates.items.push({
+                    id: doc.doc.id,
+                    name: doc.doc.name,
+                    weekly: doc.doc.weekly,
+                    daily: doc.doc.daily
+                })
+            });
+            resolve(rates)
+        }).catch((err) => {
+            reject(err)
+        });
+    })
+}
+function getRatesCloudant(req) {
+    // getting the global tracer
+    const tracer = opentracing.globalTracer();
+    // show how to start new child span
+    ctx = {
+        span: tracer.startSpan("ratesfromCloudantdb", { childOf: req.span })
+    };
+
+    //    const span = tracer.startSpan("ratesfromdb", { childOf: ctx.span })
+    return new Promise((resolve, reject) => {
+        cloudant.request({
+            db: CloudantDB,
+            path: '_all_docs',
+            qs: {
+                include_docs: true
+            },
+            headers: forwardHeaders(req)
+        }).then((body) => {
+            var rates = {};
+            rates.items = []
+            body.rows.forEach((doc) => {
+                rates.items.push({
+                    id: doc.doc.id,
+                    name: doc.doc.name,
+                    weekly: doc.doc.weekly,
+                    daily: doc.doc.daily
+                })
+            });
+            resolve(rates)
+        }).catch((err) => {
+            reject(err)
+        });
+    })
+}
+
+function forwardHeaders(req) {
+    let headers = {};
+    let incomingHeaders = ['x-request-id', 'x-b3-traceid', 'x-b3-spanid', 'x-b3-parentspanid', 'x-b3-sampled', 'x-b3-flags', 'x-ot-span-context'];
+    incomingHeaders.forEach((key) => {
+        let val = req.get(key)
+        if (val) {
+            headers[key] = val;
+        }
+    })
+    console.debug('forwarding headers to cloudant', headers)
+    return headers;
+}
+
 module.exports = {
     getRates: getRates
 }
