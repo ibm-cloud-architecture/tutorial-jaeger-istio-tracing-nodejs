@@ -5,6 +5,14 @@ Git clone this repo
 ```
 git clone --depth 1 https://.../cloudnative-tracing cloudnative-tracing
 ```
+Install nodejs 12.x, I recommend using [nvm](https://github.com/nvm-sh/nvm)
+```
+nvm install 12.1.0
+nvm use 12.1.0
+```
+
+Try the app with VSCode Run Debug "Launch via NPM" task, it specifies runtimeVersion 12.1.0, for more information on Debug with NodeJS and runtime version see here https://code.visualstudio.com/docs/nodejs/nodejs-debugging#_multi-version-support
+Make sure you have nvm or nvs install and install the node version for example node v12.1.0
 
 Try the app locally
 ```
