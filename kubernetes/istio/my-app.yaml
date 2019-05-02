@@ -36,6 +36,11 @@ spec:
       containers:
       - name: myapp
         image: csantanapr/app-rates
+        env:
+        - name: JAEGER_AGENT_HOST
+          value: jaeger-agent.istio-system.svc.cluster.local
+        - name: TRACER_SERVICE_NAME
+          value: "myapp.app-rates"
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
