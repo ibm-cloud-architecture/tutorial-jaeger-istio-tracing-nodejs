@@ -23,6 +23,8 @@ function middleware(options = {}) {
         const pathname = url.parse(req.url).pathname;
         const span = tracer.startSpan(pathname, { childOf: wireCtx });
         span.log({ 'event': 'request_received' });
+
+        //DEBUG
         span.log(req.headers)
 
         // include some useful tags on the trace

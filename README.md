@@ -190,7 +190,7 @@ Will be using the `jaeger-client` and using some code from `express-opentracing`
 ### Resources
 - Repo for the book Mastering Distributed Tracing by Yuri Shkuro https://github.com/PacktPublishing/Mastering-Distributed-Tracing
 - OpenTracing Tutorial https://github.com/yurishkuro/opentracing-tutorial
-- OpenTracing AP Documentation https://doc.esdoc.org/github.com/opentracing/opentracing-javascript/identifiers.html
+- OpenTracing API Documentation https://doc.esdoc.org/github.com/opentracing/opentracing-javascript/identifiers.html
 
 ### Development Hacking
 Instructions for developers doing work on this repo and making updates
