@@ -1,9 +1,9 @@
 # Cloud Native Distributing Tracing for Node.js
 
 ## Table of Contents
-- [Run the App](Run-the-App)
-- [Jaeger using Docker](Jaeger-using-Docker)
-- [Jaeger using Docker Compose](Jaeger-using-Docker-Compose)
+- [Run the App](#run-the-app)
+- [Jaeger using Docker](#jaeger-using-docker)
+- [Jaeger using Docker Compose](#using-jaeger-locally-using-docker-compose)
 - [Jaeger using Kubernetes](jaeger.md)
 - [Installing Istio on Minikube](minikube.md)
 - [Jaeger with Istio on Kubernetes](istio.md)
