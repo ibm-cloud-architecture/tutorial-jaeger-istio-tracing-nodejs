@@ -44,7 +44,7 @@ myapp-v1-5d8d5f5496-wvjdf   2/2     Running   0          6m22s
 ```
 Check that the sidecard container is injected and that two containers are running
 ```
-kubectl pod describe myapp-v1-5d8d5f5496-wvjdf
+kubectl describe pod myapp-v1-5d8d5f5496-wvjdf
 ```
 
 To verify that the pod is accesible via service use port-forward
@@ -138,3 +138,35 @@ Using hey:
 hey -c 1 -z 5m -H "X-B3-Sampled:1" http://${GATEWAY_URL}/rates
 ```
 Using the header `-H "X-B3-Sampled:1"` force the requests to be sampled
+
+### (Optional) Install Wave Scope
+To install wave scope see instructions here: https://www.weave.works/docs/scope/latest/installing/#kubernetes-local-clone
+
+TLDR;
+```
+git clone https://github.com/weaveworks/scope
+cd scope
+kubectl apply -f examples/k8s
+```
+
+Open Wave Scope
+```
+kubectl port-forward svc/weave-scope-app -n weave 4040:80
+```
+open http://localhost:4040/
+
+### Setting up minikube for Istio
+
+If you have Docker for Desktop you might want to close the application as you will need memory for your Minikube VM
+
+Setup Minikube
+```
+minikube delete
+minikube config set kubernetes-version v1.14.1
+minikube config set cpus 4
+minikube config set memory 8192
+minikube config set WantUpdateNotification false
+minikube start --extra-config=apiserver.enable-admission-plugins="LimitRanger,NamespaceExists,NamespaceLifecycle,ResourceQuota,ServiceAccount,DefaultStorageClass,MutatingAdmissionWebhook"
+```
+
+Git Clone Istio
