@@ -1,6 +1,6 @@
 # Cloud Native Distributing Tracing for Node.js
 
-*Contents*
+## Table of Contents
 - [Run the App](Run-the-App)
 - [Jaeger using Docker](Jaeger-using-Docker)
 - [Jaeger using Docker Compose](Jaeger-using-Docker-Compose)
