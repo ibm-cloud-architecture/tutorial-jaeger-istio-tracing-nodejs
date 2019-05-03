@@ -28,6 +28,9 @@ function middleware(options = {}) {
         span.log(req.headers)
 
         // include some useful tags on the trace
+        if (req.get('x-b3-traceid')) {
+            span.setTag('x_b3_traceid', req.get('x-b3-traceid'));
+        }
         span.setTag(opentracing.Tags.HTTP_METHOD, req.method);
         span.setTag(opentracing.Tags.SPAN_KIND, opentracing.Tags.SPAN_KIND_RPC_SERVER);
         span.setTag(opentracing.Tags.HTTP_URL, req.url);

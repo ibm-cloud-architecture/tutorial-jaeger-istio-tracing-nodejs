@@ -107,7 +107,7 @@ open http://localhost:3000/dashboard/db/istio-mesh-dashboard
 
 Open Prometheus UI
 ```
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090
 
 ```
 open http://localhost:9090/graph
@@ -121,8 +121,20 @@ open http://localhost:16686/
 
 Open Kiali
 ```
-kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001 &
+kubectl -n istio-system port-forward $(kubectl -n istio-system get pod -l app=kiali -o jsonpath='{.items[0].metadata.name}') 20001:20001
 ```
 open http://localhost:20001/kiali/console
 
 Use `admin` and `admin` for username and password
+
+Drive some load for testing
+You can use curl or hey tool
+Using curl
+```
+while true; do curl -H "X-B3-Sampled:1" http://${GATEWAY_URL}/rates -I -s | grep "HTTP/" ; sleep 0.1; done
+```
+Using hey:
+```
+hey -c 1 -z 5m -H "X-B3-Sampled:1" http://${GATEWAY_URL}/rates
+```
+Using the header `-H "X-B3-Sampled:1"` force the requests to be sampled
