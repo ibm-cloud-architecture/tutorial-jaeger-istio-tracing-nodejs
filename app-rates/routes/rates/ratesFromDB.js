@@ -44,7 +44,7 @@ function getRatesLocal(ctx) {
     })
 }
 
-function getRatesCloudantTMP(ctx) {
+function getRatesCloudant(ctx) {
     // getting the global tracer
     const tracer = opentracing.globalTracer();
     // show how to start new child span
@@ -59,7 +59,6 @@ function getRatesCloudantTMP(ctx) {
             rates.items = []
             body.rows.forEach((doc) => {
                 // output eacj document's body
-                console.log(doc.doc);
                 rates.items.push({
                     id: doc.doc.id,
                     name: doc.doc.name,
@@ -73,7 +72,7 @@ function getRatesCloudantTMP(ctx) {
         });
     })
 }
-function getRatesCloudant(req) {
+function getRatesCloudantRequest(req) {
     // getting the global tracer
     const tracer = opentracing.globalTracer();
     // show how to start new child span

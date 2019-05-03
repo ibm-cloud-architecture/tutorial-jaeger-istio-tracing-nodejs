@@ -15,6 +15,8 @@ router.get('/', function (req, res, next) {
     ratesDB.getRates(ctx).then((rates) => {
         res.json(rates);
         next()
+    }).catch((err) => {
+        res.status(500).send({ error: err.message });
     });
 });
 
