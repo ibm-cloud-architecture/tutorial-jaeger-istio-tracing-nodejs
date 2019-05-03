@@ -28,6 +28,6 @@ spec:
         exact: /rates
     route:
     - destination:
-        host: myapp
+        host: myapp-svc
         port:
           number: 8080

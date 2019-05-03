@@ -49,7 +49,7 @@ kubectl describe pod myapp-v1-5d8d5f5496-wvjdf
 
 To verify that the pod is accesible via service use port-forward
 ```
-kubectl port-forward service/myapp 8080:8080
+kubectl port-forward service/myapp-svc 8080:8080
 ```
 Open Browser or use curl to test the app
 ```
@@ -131,11 +131,11 @@ Drive some load for testing
 You can use curl or hey tool
 Using curl
 ```
-while true; do curl -H "X-B3-Sampled:1" http://${GATEWAY_URL}/rates -I -s | grep "HTTP/" ; sleep 0.1; done
+while true; do curl -H "X-B3-Sampled:1" http://$GATEWAY_URL/rates -I -s | grep "HTTP/" ; sleep 0.1; done
 ```
 Using hey:
 ```
-hey -c 1 -z 5m -H "X-B3-Sampled:1" http://${GATEWAY_URL}/rates
+hey -c 10 -z 5m -H "X-B3-Sampled:1" http://$GATEWAY_URL/rates
 ```
 Using the header `-H "X-B3-Sampled:1"` force the requests to be sampled
 
@@ -344,22 +344,36 @@ bookinfo   [bookinfo-gateway]   [*]     34s
 ```
 
 Let's get the gateway url
-using minkube vm ip
+
+1. Using minkube vm ip and NodePort
 ```
 export INGRESS_HOST=$(minikube ip)
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].nodePort}')
 ```
 
-using clusterIP
+2. Using clusterIP if `CLUSTER-IP` is `<pending>` for `istio-egressgateway`
 ```
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.clusterIP}')
 export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 ```
 
+3. Using LoadBalancer if you restart minikube VM and re-run `minikube tunnel`
+```
+export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+```
+Check
+```
+echo INGRESS_HOST=$INGRESS_HOST
+echo INGRESS_PORT=$INGRESS_PORT
+```
+
 Create GATEWAY_URL variable
 ```
 export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
+echo GATEWAY_URL=$GATEWAY_URL
 export APP_URL=http://$GATEWAY_URL/productpage
+echo APP_URL=$APP_URL
 echo open $APP_URL
 curl -s $APP_URL | grep -o "<title>.*</title>"
 ```

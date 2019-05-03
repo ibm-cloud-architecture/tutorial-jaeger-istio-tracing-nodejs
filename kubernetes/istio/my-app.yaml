@@ -4,10 +4,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapp
+  name: myapp-svc
   labels:
     app: myapp
-    service: myapp
+    service: myapp-svc
 spec:
   ports:
   - port: 8080
