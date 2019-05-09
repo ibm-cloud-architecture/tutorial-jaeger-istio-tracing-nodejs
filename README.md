@@ -69,7 +69,7 @@ docker run --rm --name app-rates -it \
 -p 8080:8080 \
 app-rates
 ```
-## Using Jaeger locally using Docker-Compose
+## Jaeger using Docker Compose
 Instead of running each docker seperately you can bring all containers at once using docker-compose
 
 To start all containers
@@ -81,7 +81,7 @@ To stop and remove containers
 docker-compose down
 ```
 
-## Test the Application
+### Trace the Application
 Open the browser for the nodejs.app http://localhost:8080
 
 Try the calling the API http://localhost:8080/rates a couple of times to report some traces

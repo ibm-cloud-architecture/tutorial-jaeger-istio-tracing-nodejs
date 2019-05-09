@@ -22,6 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/rates', ratesRouter);
+app.use('/car-rates', ratesRouter);
 
 module.exports = app;
