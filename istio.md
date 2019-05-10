@@ -77,7 +77,7 @@ kubectl port-forward service/myapp-svc 8080:8080
 ```
 Open Browser or use curl to test the app
 ```
-curl localhost:8080/car-rates
+curl localhost:8080/rates
 ```
 
 Let's create the Istio Gateway and VirtualService to make the service accessible from outside of your Kubernetes cluster
@@ -103,7 +103,7 @@ myapp   [myapp-gateway]   [*]     3m
 
 Confirm the App is accessible via `GATEWAY_URL` open a Browser or use `curl`
 ```
-export APP_URL=http://$GATEWAY_URL/car-rates
+export APP_URL=http://$GATEWAY_URL/rates
 echo APP_URL=$APP_URL
 echo open $APP_URL
 curl -s $APP_URL -I -s | grep "HTTP/"
@@ -145,11 +145,11 @@ Drive some load for testing
 You can use curl or hey tool
 Using curl
 ```
-while true; do curl  http://$GATEWAY_URL/car-rates -I -s | grep "HTTP/" ; sleep 0.1; done
+while true; do curl  http://$GATEWAY_URL/rates -I -s | grep "HTTP/" ; sleep 0.1; done
 ```
 Using hey:
 ```
-hey -c 10 -z 5m  http://$GATEWAY_URL/car-rates
+hey -c 10 -z 5m  http://$GATEWAY_URL/rates
 ```
 Using the header `-H "X-B3-Sampled:1"` force the requests to be sampled
 

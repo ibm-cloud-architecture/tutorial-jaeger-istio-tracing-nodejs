@@ -25,7 +25,7 @@ spec:
   http:
   - match:
     - uri:
-        exact: /car-rates
+        exact: /rates
     route:
     - destination:
         host: myapp-svc
