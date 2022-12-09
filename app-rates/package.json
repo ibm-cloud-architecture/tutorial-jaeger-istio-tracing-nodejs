@@ -11,7 +11,7 @@
     "@cloudant/cloudant": "^4.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
-    "express": "~4.16.0",
+    "express": "~4.18.2",
     "jaeger-client": "^3.14.4",
     "morgan": "~1.9.0"
   }
